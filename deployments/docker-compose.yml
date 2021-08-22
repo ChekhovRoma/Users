@@ -1,14 +1,23 @@
 # Specify the version for docker-compose.yml
-version: "3.4"
+version: '3.1'
 
 # add the services needed (postgres,go)
 services:
+  users:
+    container_name: users
+    # build the Dockerfile, alternatively use an image.
+    build:
+      context: ./../
+      dockerfile: ./deployments/Dockerfile
+    depends_on:
+      - postgres
+
   postgres:
     container_name: postgres
     image: postgres:latest
     restart: always
     environment:
-      POSTGRES_USER: root
+      POSTGRES_USER: romax
       POSTGRES_PASSWORD: mypassword
       # Optional: Give a name to the database, otherwise
       # use the default value POSTGRES_USER as a database name (user in this case.)
@@ -16,15 +25,5 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - dbdata:/var/lib/postgresql/data
-
-  go:
-    container_name: users
-    # build the Dockerfile, alternatively use an image.
-    build:
-      context: .
-    depends_on:
-      - "postgres"
-
-volumes:
-  dbdata: # create the volume for persisting data.
+      - ./deployments/postgres/init/init_table.sql:/docker-entrypoint-initdb.d/init.sql
+#      - ./deployments/postgres/data:/var/lib/postgresql/data
