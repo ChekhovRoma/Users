@@ -18,7 +18,7 @@ func main() {
 	fmt.Println("connecting")
 	// these details match the docker-compose.yml file.
 	postgresInfo := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		"postgres", 5432, "user", "mypassword", "user")
+		"postgres", 5432, "root", "mypassword", "RoMax")
 	db, err := sql.Open("postgres", postgresInfo)
 	if err != nil {
 		panic(err)

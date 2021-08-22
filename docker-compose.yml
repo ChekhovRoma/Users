@@ -6,8 +6,9 @@ services:
   postgres:
     container_name: postgres
     image: postgres:latest
+    restart: always
     environment:
-      POSTGRES_USER: user
+      POSTGRES_USER: root
       POSTGRES_PASSWORD: mypassword
       # Optional: Give a name to the database, otherwise
       # use the default value POSTGRES_USER as a database name (user in this case.)
