@@ -19,11 +19,6 @@ services:
     environment:
       POSTGRES_USER: romax
       POSTGRES_PASSWORD: mypassword
-      # Optional: Give a name to the database, otherwise
-      # use the default value POSTGRES_USER as a database name (user in this case.)
-      # POSTGRES_DB: testdb
+      POSTGRES_DB: romax
     ports:
       - "5432:5432"
-    volumes:
-      - ./deployments/postgres/init/init_table.sql:/docker-entrypoint-initdb.d/init.sql
-#      - ./deployments/postgres/data:/var/lib/postgresql/data
