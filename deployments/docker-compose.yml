@@ -1,0 +1,24 @@
+# Specify the version for docker-compose.yml
+version: '3.1'
+
+# add the services needed (postgres,go)
+services:
+  users:
+    container_name: users
+    # build the Dockerfile, alternatively use an image.
+    build:
+      context: ./../
+      dockerfile: ./deployments/Dockerfile
+    depends_on:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_USER: romax
+      POSTGRES_PASSWORD: mypassword
+      POSTGRES_DB: romax
+    ports:
+      - "5432:5432"
