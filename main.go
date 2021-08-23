@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	_ "github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
 	"os"
 	"os/signal"
@@ -43,4 +44,15 @@ func main() {
 	fmt.Println("app started")
 	s := <-c
 	fmt.Println("Got signal:", s) //Got signal: terminated
+
+	// @Shilin так не работает :(
+	//dbTest, err := gorm.Open("postgres", "user=romax password=mypassword dbname=romax sslmode=disabled")
+	//if err != nil {
+	//	fmt.Println()
+	//	panic(err)
+	//}
+	//dbTest.AutoMigrate(&models.User{})
+
+	// @Shilin  так тоже не работает :(
+	//postgres.Init()
 }
