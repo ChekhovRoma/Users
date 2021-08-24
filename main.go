@@ -5,6 +5,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
+	"users/deployments/postgres"
 	"users/models"
 )
 
@@ -43,14 +44,14 @@ func main() {
 	//s := <-c
 	//fmt.Println("Got signal:", s) //Got signal: terminated
 
-	// @Shilin так не работает :(
-	dbTest, err := gorm.Open("postgres", "user=romax password=mypassword dbname=romax sslmode=disabled")
+	//вариант 1 @Shilin так работает :)
+	dbTest, err := gorm.Open("postgres", "user=romax password=mypassword dbname=romax sslmode=disable")
 	if err != nil {
 		fmt.Println()
 		panic(err)
 	}
 	dbTest.AutoMigrate(&models.User{})
 
-	// @Shilin  так тоже не работает :(
-	//postgres.Init()
+	//вариант 2 @Shilin  так тоже работает :)
+	postgres.Init()
 }

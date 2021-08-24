@@ -11,7 +11,7 @@ import (
 var dbase *gorm.DB
 
 func Init() *gorm.DB {
-	db, err := gorm.Open("postgres", "user=romax password=mypassword dbname=romax sslmode=disabled")
+	db, err := gorm.Open("postgres", "user=romax password=mypassword dbname=romax sslmode=disable")
 
 	if err != nil {
 		log.Fatal(err)
