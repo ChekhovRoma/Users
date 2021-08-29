@@ -1,0 +1,7 @@
+# config.yml
+
+postgres:
+  username: "romax"
+  password: "mypassword"
+  dbname: "romax"
+  sslmode: "disable"
