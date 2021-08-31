@@ -9,7 +9,6 @@ RUN go mod download
 RUN go build -o ./build/users
 
 EXPOSE 8080
-RUN ["chmod", "+x", "./build/users"]
 
 ENTRYPOINT ["./build/users"]
 
