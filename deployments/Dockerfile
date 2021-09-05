@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY ./ ./
 
-RUN go mod download
+RUN go mod vendor
 
 RUN go build -o ./build/users
 

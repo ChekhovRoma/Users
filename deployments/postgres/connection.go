@@ -3,7 +3,7 @@ package postgres
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
-	//"github.com/spf13/viper"
+	"github.com/spf13/viper"
 	"log"
 	"time"
 	"users/models"
@@ -12,18 +12,18 @@ import (
 var dbase *gorm.DB
 
 func Init() *gorm.DB {
-	//if err := initConfig(); err != nil {
-	//	log.Fatalf("error initializing configs: %s", err.Error())
-	//}
+	if err := initConfig(); err != nil {
+		log.Fatalf("error initializing configs: %s", err.Error())
+	}
 
-	db, err := gorm.Open("postgres", "user=romax, password=mypassword, dbname=romax, sslmode=disable")
-	//db, err := gorm.Open(
-	//	"postgres",
-	//	fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s",
-	//		viper.GetString("username"),
-	//		viper.GetString("password"),
-	//		viper.GetString("dbname"),
-	//		viper.GetString("sslmode")))
+	//db, err := gorm.Open("postgres", "user=romax, password=mypassword, dbname=romax, sslmode=disable")
+	db, err := gorm.Open(
+		"postgres",
+		fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s",
+			viper.GetString("username"),
+			viper.GetString("password"),
+			viper.GetString("dbname"),
+			viper.GetString("sslmode")))
 
 	if err != nil {
 		log.Fatal(err)
@@ -47,8 +47,8 @@ func GetDB() *gorm.DB {
 	return dbase
 }
 
-//func initConfig() error {
-//	viper.AddConfigPath("configs")
-//	viper.SetConfigName("config")
-//	return viper.ReadInConfig()
-//}
+func initConfig() error {
+	viper.AddConfigPath("configs")
+	viper.SetConfigName("config")
+	return viper.ReadInConfig()
+}

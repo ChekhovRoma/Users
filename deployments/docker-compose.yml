@@ -12,7 +12,9 @@ services:
     depends_on:
       - postgres
     ports:
-      - "8080:8080"
+      - "8084:8084"
+    networks:
+      - default
 
   postgres:
     container_name: postgres
@@ -24,3 +26,8 @@ services:
       POSTGRES_DB: romax
     ports:
       - "5432:5432"
+
+networks:
+  default:
+    external:
+      name: my-network

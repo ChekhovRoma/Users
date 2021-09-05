@@ -1,32 +1,19 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"net/http"
+	"users/pkg/handler"
+	"users/pkg/repository"
+	"users/pkg/service"
 )
 
-func dockerHandler(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf(w, "<h1>Hello, World(From Docker)!")
-}
-
 func main() {
-	//srv := new(users.Server)
-	//if err := srv.Run("8084"); err != nil {
-	//	log.Fatalf("error occured while running http server: %s", err.Error())
-	//}
-	//c := make(chan os.Signal, 0)
-	//signal.Notify(c)
+	repos := repository.NewRepository()
+	services := service.NewService(repos)
+	handlers := handler.NewHandler(services)
 
-	http.HandleFunc("/docker", dockerHandler)
-
-	log.Fatal(http.ListenAndServe(":8080", nil))
-
-	//s := <-c
-	//fmt.Println("Got signal:", s) //Got signal: terminated
-	//r := mux.NewRouter()
-	//r.HandleFunc("/test", testMethod).Methods("GET")
-	//
-	//fmt.Println("hello")
-
+	srv := new(Server)
+	if err := srv.Run("8080", handlers.InitRoutes()); err != nil {
+		log.Fatalf("error occured while running http server: %s", err.Error())
+	}
 }
