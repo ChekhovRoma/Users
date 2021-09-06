@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	_ "users/configs"
 	"users/pkg/handler"
 	"users/pkg/repository"
 	"users/pkg/service"

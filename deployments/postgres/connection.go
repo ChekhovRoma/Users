@@ -3,6 +3,7 @@ package postgres
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
+	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
 	"log"
 	"time"
@@ -16,20 +17,23 @@ func Init() *gorm.DB {
 		log.Fatalf("error initializing configs: %s", err.Error())
 	}
 
-	//db, err := gorm.Open("postgres", "user=romax, password=mypassword, dbname=romax, sslmode=disable")
-	db, err := gorm.Open(
-		"postgres",
-		fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s",
-			viper.GetString("username"),
-			viper.GetString("password"),
-			viper.GetString("dbname"),
-			viper.GetString("sslmode")))
+	db, err := gorm.Open("postgres", "user=romax password=mypassword dbname=romax sslmode=disable")
+	//db, err := gorm.Open(
+	//	"postgres",
+	//	fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s",
+	//		viper.GetString("username"),
+	//		viper.GetString("password"),
+	//		viper.GetString("dbname"),
+	//		viper.GetString("sslmode")))
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	db.AutoMigrate(&models.User{})
+	testDb := db.AutoMigrate(&models.User{})
+	if testDb != nil {
+		log.Fatal("error initializing configs: ", testDb)
+	}
 	return db
 }
 
