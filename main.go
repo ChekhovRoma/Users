@@ -2,13 +2,18 @@ package main
 
 import (
 	"log"
-	_ "users/configs"
+	"users/deployments/postgres"
+	"users/models"
 	"users/pkg/handler"
 	"users/pkg/repository"
 	"users/pkg/service"
 )
 
 func main() {
+	//configs.Init()
+	db := postgres.GetDB()
+	db.AutoMigrate(&models.User{})
+
 	repos := repository.NewRepository()
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services)
