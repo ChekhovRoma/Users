@@ -17,19 +17,12 @@ func Init() *gorm.DB {
 		log.Fatalf("error initializing configs: %s", err.Error())
 	}
 
-	//str := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s",
-	//	viper.GetString("username"),
-	//	viper.GetString("password"),
-	//	viper.GetString("dbname"),
-	//	viper.GetString("sslmode"))
-	//
-	//log.Println(str)
-	//db, err := gorm.Open("postgres", "user=romax password=mypassword dbname=romax sslmode=disable")
-
-	db, err := gorm.Open("postgres", fmt.Sprintf("user=%s password=%s dbname=%s sslmode=%s",
+	db, err := gorm.Open("postgres", fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
+		viper.GetString("host"),
 		viper.GetString("username"),
 		viper.GetString("password"),
 		viper.GetString("dbname"),
+		viper.GetString("port"),
 		viper.GetString("sslmode")))
 
 	if err != nil {
