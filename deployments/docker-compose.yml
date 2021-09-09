@@ -17,7 +17,7 @@ services:
       - default
 
   postgres:
-    container_name: postgres
+    container_name: postgresCont
     image: postgres:latest
     restart: always
     environment:
