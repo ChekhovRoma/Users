@@ -5,6 +5,7 @@ version: '3.1'
 services:
   users:
     container_name: users
+    command: ./wait-for-postgres.sh postgres
     # build the Dockerfile, alternatively use an image.
     build:
       context: ./../
@@ -13,11 +14,18 @@ services:
       - postgres
     ports:
       - "8084:8084"
+    environment:
+      DB_PASSWORD: mypassword
 
   postgres:
     container_name: postgres
     image: postgres:latest
     restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U romax" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     environment:
       POSTGRES_USER: romax
       POSTGRES_PASSWORD: mypassword
