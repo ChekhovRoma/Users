@@ -4,13 +4,6 @@ WORKDIR /app
 
 COPY ./ ./
 
-# install psql
-RUN apk update
-RUN apk add postgresql-client
-
-# make wait-for-postgres.sh executable
-RUN chmod +x wait-for-postgres.sh
-
 RUN go mod vendor
 
 RUN go build -o ./build/users

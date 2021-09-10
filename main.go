@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -17,7 +18,15 @@ func main() {
 	signal.Notify(stopChan, os.Interrupt, syscall.SIGTERM, syscall.SIGINT)
 
 	db := postgres.GetDB()
-	db.AutoMigrate(&models.User{})
+	fmt.Println(db.Error)
+
+	err := db.AutoMigrate(&models.User{}).Error
+	if err != nil {
+		fmt.Println("automigrate ne proshel.")
+		fmt.Println("err: ", err)
+		fmt.Println("err: ", db.Error)
+		fmt.Println("err: ", err.Error())
+	}
 
 	repos := repository.NewRepository()
 	services := service.NewService(repos)

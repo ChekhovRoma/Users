@@ -18,7 +18,7 @@ services:
       DB_PASSWORD: mypassword
 
   postgres:
-    container_name: postgres
+    container_name: postgres-db
     image: postgres:latest
     restart: always
     healthcheck:
