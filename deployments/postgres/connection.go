@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/lib/pq"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"log"
 	"time"
 )
 
@@ -13,7 +13,7 @@ var dbase *gorm.DB
 
 func Init() *gorm.DB {
 	if err := initConfig(); err != nil {
-		log.Fatalf("error initializing configs: %s", err.Error())
+		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
 
 	//db, err := gorm.Open("postgres", "postgres://romax:mypassword@postgres-db/romax?sslmode=disable")
@@ -27,7 +27,7 @@ func Init() *gorm.DB {
 		viper.GetString("sslmode")))
 
 	if err != nil {
-		fmt.Println("connection error: ", err)
+		logrus.Println("connection error: ", err)
 	}
 
 	return db
@@ -35,18 +35,17 @@ func Init() *gorm.DB {
 
 func GetDB() *gorm.DB {
 	if dbase == nil {
-		fmt.Println("db isn't init. start init...")
+		logrus.Println("db isn't init. start init...")
 		dbase = Init()
-		fmt.Println("\n error while init: ", dbase.Error)
 		var sleep = time.Duration(1)
 		for dbase == nil {
 			sleep = sleep * 2
-			fmt.Printf("Database is unavailable. Wait for %d sec. \n", sleep)
+			logrus.Printf("database is unavailable. wait for %d sec. \n", sleep)
 			time.Sleep(sleep * time.Second)
 			dbase = Init()
 		}
 	}
-	fmt.Print("Database is ready \n")
+	logrus.Println("database is ready")
 	return dbase
 }
 
