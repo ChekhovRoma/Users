@@ -16,33 +16,28 @@ func Init() *gorm.DB {
 		log.Fatalf("error initializing configs: %s", err.Error())
 	}
 
-	db, err := gorm.Open("postgres", "postgres://romax:mypassword@postgres-db/romax?sslmode=disable")
+	//db, err := gorm.Open("postgres", "postgres://romax:mypassword@postgres-db/romax?sslmode=disable")
 
-	//db, err := gorm.Open("postgres", fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
-	//	viper.GetString("host"),
-	//	viper.GetString("username"),
-	//	viper.GetString("password"),
-	//	viper.GetString("dbname"),
-	//	viper.GetString("port"),
-	//	viper.GetString("sslmode")))
+	db, err := gorm.Open("postgres", fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
+		viper.GetString("host"),
+		viper.GetString("username"),
+		viper.GetString("password"),
+		viper.GetString("dbname"),
+		viper.GetString("port"),
+		viper.GetString("sslmode")))
 
 	if err != nil {
-		fmt.Println("\n connection error: ", err)
-		//log.Fatal(err)
+		fmt.Println("connection error: ", err)
 	}
 
-	//db.AutoMigrate(&models.User{})
-	//if testDb != nil {
-	//	log.Fatal("error initializing configs: ", testDb)
-	//}
 	return db
 }
 
 func GetDB() *gorm.DB {
 	if dbase == nil {
-		fmt.Print("DB isn't init. start init... \n ")
+		fmt.Println("db isn't init. start init...")
 		dbase = Init()
-		fmt.Print("\n error while init: ", dbase.Error)
+		fmt.Println("\n error while init: ", dbase.Error)
 		var sleep = time.Duration(1)
 		for dbase == nil {
 			sleep = sleep * 2
