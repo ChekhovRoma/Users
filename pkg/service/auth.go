@@ -1,18 +1,17 @@
 package service
 
-import (
-	"users/models"
-	"users/pkg/repository"
-)
-
-type AuthService struct {
-	repo repository.Authorization
+type UserRepository interface {
+	Create(email, password string) (int, error)
 }
 
-func NewAuthService(repo repository.Authorization) *AuthService {
-	return &AuthService{repo: repo}
+type AuthorizationService struct {
+	userRepo UserRepository
 }
 
-func (s *AuthService) CreateUser(user models.User) (int, error) {
-	return s.repo.CreateUser(user)
+func NewAuthorizationService(userRepo UserRepository) *AuthorizationService {
+	return &AuthorizationService{userRepo: userRepo}
+}
+
+func (s *AuthorizationService) Create(email, password string) (int, error) {
+	return s.userRepo.Create(email, password)
 }

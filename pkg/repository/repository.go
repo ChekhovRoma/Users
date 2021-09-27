@@ -2,19 +2,18 @@ package repository
 
 import (
 	"github.com/jinzhu/gorm"
-	"users/models"
 )
 
-type Authorization interface {
-	CreateUser(user models.User) (int, error)
+type UserRepository interface {
+	Create(email, password string) (int, error)
 }
 
-type Repository struct {
-	Authorization
+type Repositories struct {
+	UserRepo UserRepository
 }
 
-func NewRepository(db *gorm.DB) *Repository {
-	return &Repository{
-		Authorization: NewAuthSql(db),
+func NewRepository(db *gorm.DB) *Repositories {
+	return &Repositories{
+		UserRepo: NewUser(db),
 	}
 }

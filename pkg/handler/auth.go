@@ -3,19 +3,18 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"users/models"
 )
 
 func (h *Handler) signUp(c *gin.Context) {
-	var input models.User
+	var input SignUpRequest
 
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	id, err := h.services.Authorization.CreateUser(input)
-
+	//todo validate data
+	id, err := h.as.Create(input.Email, input.Password)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

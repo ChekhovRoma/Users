@@ -1,20 +1,19 @@
 package service
 
 import (
-	"users/models"
 	"users/pkg/repository"
 )
 
 type Authorization interface {
-	CreateUser(user models.User) (int, error)
+	Create(email, password string) (int, error)
 }
 
-type Service struct {
-	Authorization
+type Services struct {
+	Authorization Authorization
 }
 
-func NewService(repos *repository.Repository) *Service {
-	return &Service{
-		Authorization: NewAuthService(repos.Authorization),
+func NewService(repos *repository.Repositories) *Services {
+	return &Services{
+		Authorization: NewAuthorizationService(repos.UserRepo),
 	}
 }

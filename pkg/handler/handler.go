@@ -2,15 +2,18 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
-	"users/pkg/service"
 )
 
-type Handler struct {
-	services *service.Service
+type AuthorizationService interface {
+	Create(email, password string) (int, error)
 }
 
-func NewHandler(services *service.Service) *Handler {
-	return &Handler{services: services}
+type Handler struct {
+	as AuthorizationService
+}
+
+func NewHandler(as AuthorizationService) *Handler {
+	return &Handler{as: as}
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {

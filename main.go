@@ -24,7 +24,7 @@ func main() {
 
 	repos := repository.NewRepository(db)
 	services := service.NewService(repos)
-	handlers := handler.NewHandler(services)
+	handlers := handler.NewHandler(services.Authorization)
 
 	srv := new(Server)
 	if err := srv.Run("8080", handlers.InitRoutes()); err != nil {
