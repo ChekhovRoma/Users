@@ -6,6 +6,7 @@ import (
 
 type UserRepository interface {
 	Create(name, email, password, role string) (int, error)
+	Get(email, password string) (string, error)
 }
 
 type Repositories struct {

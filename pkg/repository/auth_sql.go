@@ -43,3 +43,11 @@ func (r *UserRepo) Create(name, email, password, role string) (int, error) {
 
 	return user.ID, nil
 }
+
+func (r *UserRepo) Get(email, password string) (string, error) {
+	var user User
+	result := r.db.Where("email = ? AND password = ?", "email", "password").Find(&user)
+	fmt.Print(result)
+
+	return "hello", nil
+}
