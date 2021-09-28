@@ -1,7 +1,7 @@
 package service
 
 type UserRepository interface {
-	Create(email, password string) (int, error)
+	Create(name, email, password, role string) (int, error)
 }
 
 type AuthorizationService struct {
@@ -12,6 +12,6 @@ func NewAuthorizationService(userRepo UserRepository) *AuthorizationService {
 	return &AuthorizationService{userRepo: userRepo}
 }
 
-func (s *AuthorizationService) Create(email, password string) (int, error) {
-	return s.userRepo.Create(email, password)
+func (s *AuthorizationService) Create(name, email, password, role string) (int, error) {
+	return s.userRepo.Create(name, email, password, role)
 }

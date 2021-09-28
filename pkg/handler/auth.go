@@ -14,7 +14,7 @@ func (h *Handler) signUp(c *gin.Context) {
 	}
 
 	//todo validate data
-	id, err := h.as.Create(input.Email, input.Password)
+	id, err := h.as.Create(input.Name, input.Email, input.Password, input.Role)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return

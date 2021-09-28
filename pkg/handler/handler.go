@@ -5,7 +5,7 @@ import (
 )
 
 type AuthorizationService interface {
-	Create(email, password string) (int, error)
+	Create(name, email, password, role string) (int, error)
 }
 
 type Handler struct {
