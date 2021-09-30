@@ -2,11 +2,12 @@ package repository
 
 import (
 	"github.com/jinzhu/gorm"
+	"users/models"
 )
 
 type UserRepository interface {
 	Create(name, email, password, role string) (int, error)
-	Get(email, password string) (string, error)
+	Get(email, password string) (models.User, error)
 }
 
 type Repositories struct {

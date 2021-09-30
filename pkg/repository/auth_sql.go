@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"time"
+	"users/models"
 )
 
 type (
@@ -44,10 +45,9 @@ func (r *UserRepo) Create(name, email, password, role string) (int, error) {
 	return user.ID, nil
 }
 
-func (r *UserRepo) Get(email, password string) (string, error) {
-	var user User
-	result := r.db.Where("email = ? AND password = ?", "email", "password").Find(&user)
-	fmt.Print(result)
+func (r *UserRepo) Get(email, password string) (models.User, error) {
+	var user models.User
+	result := r.db.Where(&models.User{Email: email, Password: password}).Find(&user)
 
-	return "hello", nil
+	return user, result.Error
 }
