@@ -7,6 +7,7 @@ import (
 type AuthorizationService interface {
 	Create(name, email, password, role string) (int, error)
 	GenerateToken(email, password string) (string, error)
+	ParseToken(token string) (int, error)
 }
 
 type Handler struct {
@@ -24,6 +25,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		auth.POST("sign-up", h.signUp)
 		auth.POST("sign-in", h.signIn)
+	}
+
+	api := router.Group("/api", h.userIdentity)
+	{
+		api.POST("test", h.test)
 	}
 
 	return router

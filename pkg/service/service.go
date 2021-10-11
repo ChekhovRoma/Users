@@ -7,6 +7,7 @@ import (
 type Authorization interface {
 	Create(name, email, password, role string) (int, error)
 	GenerateToken(email, password string) (string, error)
+	ParseToken(token string) (int, error)
 }
 
 type Services struct {
