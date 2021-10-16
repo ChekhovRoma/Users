@@ -15,7 +15,8 @@ func (h *Handler) signUp(c *gin.Context) {
 	}
 
 	//todo validate data
-	id, err := h.as.Create(input.Name, input.Email, input.Password, input.Role)
+	//todo layer dto
+	id, err := h.as.SignUp(input.Name, input.Email, input.Password, input.Role)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
@@ -34,17 +35,21 @@ func (h *Handler) signIn(c *gin.Context) {
 		return
 	}
 
-	token, err := h.as.GenerateToken(input.Email, input.Password)
+	res, err := h.as.SignIn(c.Request.Context(), input.Email, input.Password)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"token": token,
+		"token": res,
 	})
 }
 
 func (h *Handler) test(c *gin.Context) {
 	fmt.Println("ITS ALIVE!!!!!!!!")
+
+	c.JSON(http.StatusOK, map[string]interface{}{
+		"status": 200,
+	})
 }

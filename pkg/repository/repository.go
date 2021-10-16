@@ -7,7 +7,9 @@ import (
 
 type UserRepository interface {
 	Create(name, email, password, role string) (int, error)
-	Get(email, password string) (models.User, error)
+	GetByCredentials(email, password string) (models.User, error)
+	Get(id int) (models.User, error)
+	Update(user models.User) (models.User, error)
 }
 
 type Repositories struct {
