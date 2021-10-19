@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/spf13/cast"
@@ -51,23 +50,6 @@ func (s *AuthorizationService) SignUp(name, email, password, role string) (int, 
 	return s.userRepo.Create(name, email, password, role)
 }
 
-func (s *AuthorizationService) GenerateToken(email, password string) (string, error) {
-	user, err := s.userRepo.GetByCredentials(email, password)
-	if err != nil {
-		return "", err
-	}
-
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(tokenTTL).Unix(),
-			IssuedAt:  time.Now().Unix(),
-		},
-		user.ID,
-	})
-
-	return token.SignedString([]byte(signatureKey))
-}
-
 func (s *AuthorizationService) SignIn(ctx context.Context, email, password string) (handler.Tokens, error) {
 	user, err := s.userRepo.GetByCredentials(email, password)
 	if err != nil {
@@ -111,24 +93,4 @@ func (s *AuthorizationService) CreateSession(ctx context.Context, userId int) (h
 	}
 
 	return res, err
-}
-
-func (s *AuthorizationService) ParseToken(accessToken string) (int, error) {
-	token, err := jwt.ParseWithClaims(accessToken, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, errors.New("invalid signing method")
-		}
-
-		return []byte(signatureKey), nil
-	})
-	if err != nil {
-		return 0, err
-	}
-
-	claims, ok := token.Claims.(*tokenClaims)
-	if !ok {
-		return 0, errors.New("token claims are not of type *tokenClaims")
-	}
-
-	return claims.UserId, nil
 }

@@ -23,7 +23,7 @@ func (h *Handler) userIdentity(c *gin.Context) {
 		newErrorResponse(c, http.StatusUnauthorized, "invalid auth header")
 		return
 	}
-
+	// @q внутри authService есть токен менеджер почему не могу к нему обратиться?
 	userId, err := h.as.ParseToken(headerParts[1])
 	if err != nil {
 		newErrorResponse(c, http.StatusUnauthorized, err.Error())

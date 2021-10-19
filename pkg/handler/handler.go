@@ -13,8 +13,9 @@ type Tokens struct {
 type AuthorizationService interface {
 	SignUp(name, email, password, role string) (int, error)
 	SignIn(ctx context.Context, email, password string) (Tokens, error)
-	GenerateToken(email, password string) (string, error)
-	ParseToken(token string) (int, error)
+	// @q убрать его отсюда потому что он тут не используется
+	//GenerateToken(email, password string) (string, error)
+	//ParseToken(token string) (int, error)
 }
 
 type Handler struct {

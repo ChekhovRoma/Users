@@ -23,6 +23,7 @@ func main() {
 	db.AutoMigrate(&models.User{})
 
 	repos := repository.NewRepository(db)
+	// @q и как сюда передать токен менеджер ,а он там есть ну а почему тогда я не могу обращаться h.as.tm
 	services := service.NewService(repos)
 	handlers := handler.NewHandler(services.Authorization)
 
