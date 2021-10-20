@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/spf13/cast"
+	"strconv"
 	"time"
 	"users/models"
-	"users/pkg/handler"
 )
 
 const (
@@ -39,6 +39,16 @@ type AuthorizationService struct {
 	tm       TokenManager
 }
 
+func (s *AuthorizationService) ParseToken(token string) (int, error) {
+	res, err := s.tm.Parse(token)
+	if err != nil {
+		return 0, err
+	}
+
+	result, err := strconv.Atoi(res)
+	return result, err
+}
+
 func NewAuthorizationService(userRepo UserRepository, tm TokenManager) *AuthorizationService {
 	return &AuthorizationService{
 		userRepo: userRepo,
@@ -50,18 +60,18 @@ func (s *AuthorizationService) SignUp(name, email, password, role string) (int, 
 	return s.userRepo.Create(name, email, password, role)
 }
 
-func (s *AuthorizationService) SignIn(ctx context.Context, email, password string) (handler.Tokens, error) {
+func (s *AuthorizationService) SignIn(ctx context.Context, email, password string) (models.Tokens, error) {
 	user, err := s.userRepo.GetByCredentials(email, password)
 	if err != nil {
-		return handler.Tokens{}, fmt.Errorf("get user: %w", err)
+		return models.Tokens{}, fmt.Errorf("get user: %w", err)
 	}
 
 	return s.CreateSession(ctx, user.ID)
 }
 
-func (s *AuthorizationService) CreateSession(ctx context.Context, userId int) (handler.Tokens, error) {
+func (s *AuthorizationService) CreateSession(ctx context.Context, userId int) (models.Tokens, error) {
 	var (
-		res handler.Tokens
+		res models.Tokens
 		err error
 	)
 

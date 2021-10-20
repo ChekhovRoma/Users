@@ -16,7 +16,6 @@ func (h *Handler) signUp(c *gin.Context) {
 
 	//todo validate data
 	//todo layer dto
-	// @q почему интерфесы описаны выше если ипользуются тут?
 	id, err := h.as.SignUp(input.Name, input.Email, input.Password, input.Role)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())

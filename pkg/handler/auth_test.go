@@ -8,12 +8,12 @@ import (
 	"net/http/httptest"
 	"testing"
 	"users/models"
+	mock_service "users/pkg/handler/mocks"
 	"users/pkg/service"
-	mock_service "users/pkg/service/mocks"
 )
 
 func TestHandler_signUp(t *testing.T) {
-	type mockBehavior func(s *mock_service.MockAuthorization, user models.User)
+	type mockBehavior func(s *mock_service.MockAuthorizationService, user models.User)
 
 	testTable := []struct {
 		name                string
@@ -32,7 +32,7 @@ func TestHandler_signUp(t *testing.T) {
 				Password: "qwerty",
 				Role:     "Boss",
 			},
-			mockBehavior: func(s *mock_service.MockAuthorization, user models.User) {
+			mockBehavior: func(s *mock_service.MockAuthorizationService, user models.User) {
 				s.EXPECT().SignUp(user.Name, user.Email, user.Password, user.Role).Return(1, nil)
 			},
 			expectedStatusCode:  200,
@@ -45,7 +45,7 @@ func TestHandler_signUp(t *testing.T) {
 			c := gomock.NewController(t)
 			defer c.Finish()
 
-			auth := mock_service.NewMockAuthorization(c)
+			auth := mock_service.NewMockAuthorizationService(c)
 			testCase.mockBehavior(auth, testCase.inputUser)
 
 			services := &service.AuthorizationService{}
@@ -55,7 +55,7 @@ func TestHandler_signUp(t *testing.T) {
 			r.POST("/sign-up", h.signUp)
 
 			w := httptest.NewRecorder()
-			req := httptest.NewRequest("POST", "/sign-up",
+			req := httptest.NewRequest("POST", "http://localhost:8080/auth/sign-up",
 				bytes.NewBufferString(testCase.inputBody))
 
 			r.ServeHTTP(w, req)

@@ -2,11 +2,9 @@ package service
 
 import (
 	"context"
-	"users/pkg/handler"
+	"users/models"
 	"users/pkg/repository"
 )
-
-//go:generate mockgen -source=service.go -destination=mocks/mock.go
 
 //todo move to config
 const salt = "edrftgyhujikiuy"
@@ -14,8 +12,8 @@ const salt = "edrftgyhujikiuy"
 type Authorization interface {
 	SignUp(name, email, password, role string) (int, error)
 	//GenerateToken(email, password string) (string, error)
-	//ParseToken(token string) (int, error)
-	SignIn(ctx context.Context, email, password string) (handler.Tokens, error)
+	ParseToken(token string) (int, error)
+	SignIn(ctx context.Context, email, password string) (models.Tokens, error)
 }
 
 type Services struct {
