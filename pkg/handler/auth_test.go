@@ -2,6 +2,7 @@ package handler
 
 import (
 	"bytes"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"github.com/magiconair/properties/assert"
@@ -9,7 +10,6 @@ import (
 	"testing"
 	"users/models"
 	mock_service "users/pkg/handler/mocks"
-	"users/pkg/service"
 )
 
 func TestHandler_signUp(t *testing.T) {
@@ -36,7 +36,29 @@ func TestHandler_signUp(t *testing.T) {
 				s.EXPECT().SignUp(user.Name, user.Email, user.Password, user.Role).Return(1, nil)
 			},
 			expectedStatusCode:  200,
-			expectedRequestBody: `{"id": 1}`,
+			expectedRequestBody: `{"id":1}`,
+		},
+		{
+			name:                "Empty Fields",
+			inputBody:           `{"name": "Test","password": "qwerty","role": "Boss"}`,
+			mockBehavior:        func(s *mock_service.MockAuthorizationService, user models.User) {},
+			expectedStatusCode:  400,
+			expectedRequestBody: `{"message":"invalid input body"}`,
+		},
+		{
+			name:      "Service Failure",
+			inputBody: `{"name": "Test","email": "test","password": "qwerty","role": "Boss"}`,
+			inputUser: models.User{
+				Name:     "Test",
+				Email:    "test",
+				Password: "qwerty",
+				Role:     "Boss",
+			},
+			mockBehavior: func(s *mock_service.MockAuthorizationService, user models.User) {
+				s.EXPECT().SignUp(user.Name, user.Email, user.Password, user.Role).Return(1, errors.New("service failure"))
+			},
+			expectedStatusCode:  500,
+			expectedRequestBody: `{"message":"service failure"}`,
 		},
 	}
 
@@ -48,20 +70,19 @@ func TestHandler_signUp(t *testing.T) {
 			auth := mock_service.NewMockAuthorizationService(c)
 			testCase.mockBehavior(auth, testCase.inputUser)
 
-			services := &service.AuthorizationService{}
-			h := NewHandler(services)
+			h := NewHandler(auth)
 
 			r := gin.New()
 			r.POST("/sign-up", h.signUp)
 
 			w := httptest.NewRecorder()
-			req := httptest.NewRequest("POST", "http://localhost:8080/auth/sign-up",
+			req := httptest.NewRequest("POST", "/sign-up",
 				bytes.NewBufferString(testCase.inputBody))
 
 			r.ServeHTTP(w, req)
 
-			assert.Equal(t, testCase.expectedStatusCode, w.Code)
-			assert.Equal(t, testCase.expectedRequestBody, w.Body.String())
+			assert.Equal(t, w.Code, testCase.expectedStatusCode)
+			assert.Equal(t, w.Body.String(), testCase.expectedRequestBody)
 		})
 	}
 }

@@ -15,6 +15,12 @@ func (h *Handler) signUp(c *gin.Context) {
 	}
 
 	//todo validate data
+	if input.Email == "" {
+		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+		return
+	}
+	fmt.Println(input.Name)
+
 	//todo layer dto
 	id, err := h.as.SignUp(input.Name, input.Email, input.Password, input.Role)
 	if err != nil {
