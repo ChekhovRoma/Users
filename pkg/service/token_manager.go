@@ -34,7 +34,7 @@ func (m *Manager) Parse(accessToken string) (string, error) {
 		return []byte(m.signingKey), nil
 	})
 	if err != nil {
-		return "", err
+		return "", fmt.Errorf("parse token: %w", err)
 	}
 
 	claims, ok := token.Claims.(jwt.MapClaims)
@@ -52,7 +52,7 @@ func (m *Manager) NewRefreshToken() (string, error) {
 	r := rand.New(s)
 
 	if _, err := r.Read(b); err != nil {
-		return "", err
+		return "", fmt.Errorf("generete token: %w", err)
 	}
 
 	return fmt.Sprintf("%x", b), nil

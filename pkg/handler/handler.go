@@ -7,13 +7,10 @@ import (
 )
 
 //go:generate mockgen -source=handler.go -destination=mocks/mock.go
-//была ошибка в том что тут находилась модель токена но так же мне она нужна была в интерфесе что в сервисе
 
 type AuthorizationService interface {
 	SignUp(name, email, password, role string) (int, error)
 	SignIn(ctx context.Context, email, password string) (models.Tokens, error)
-	// @q убрать его отсюда потому что он тут не используется
-	//GenerateToken(email, password string) (string, error)
 	ParseToken(token string) (int, error)
 }
 
@@ -31,7 +28,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	auth := router.Group("/auth")
 	{
 		auth.POST("sign-up", h.signUp)
-		auth.POST("sign-in", h.signIn)
+		auth.POST("sign-in", h.SignIn)
 	}
 
 	api := router.Group("/api", h.userIdentity)

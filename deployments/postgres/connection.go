@@ -16,8 +16,10 @@ func Init() *gorm.DB {
 		logrus.Fatalf("error initializing configs: %s", err.Error())
 	}
 
+	//for docker
 	//db, err := gorm.Open("postgres", "postgres://romax:mypassword@postgres-db/romax?sslmode=disable")
 
+	//for local test
 	db, err := gorm.Open("postgres", fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
 		viper.GetString("host"),
 		viper.GetString("username"),

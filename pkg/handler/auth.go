@@ -10,15 +10,15 @@ func (h *Handler) signUp(c *gin.Context) {
 	var input SignUpRequest
 
 	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "required field is missing")
 		return
 	}
 
 	//todo validate data
-	if input.Email == "" {
-		newErrorResponse(c, http.StatusBadRequest, "invalid input body")
-		return
-	}
+	//if input.Email == "" {
+	//	newErrorResponse(c, http.StatusBadRequest, "invalid input body")
+	//	return
+	//}
 	fmt.Println(input.Name)
 
 	//todo layer dto
@@ -33,14 +33,16 @@ func (h *Handler) signUp(c *gin.Context) {
 	})
 }
 
-func (h *Handler) signIn(c *gin.Context) {
+func (h *Handler) SignIn(c *gin.Context) {
 	var input SignInRequest
 
+	// нужно ли выносить сообщения ошибок в отдельный файл с константами?
 	if err := c.BindJSON(&input); err != nil {
-		newErrorResponse(c, http.StatusBadRequest, err.Error())
+		newErrorResponse(c, http.StatusBadRequest, "required field is missing")
 		return
 	}
 
+	// @q какой код лучше использовать вместо 500 ?
 	res, err := h.as.SignIn(c.Request.Context(), input.Email, input.Password)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
@@ -48,7 +50,8 @@ func (h *Handler) signIn(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, map[string]interface{}{
-		"token": res,
+		"accessToken":  res.AccessToken,
+		"refreshToken": res.AccessToken,
 	})
 }
 

@@ -80,26 +80,25 @@ func (s *AuthorizationService) CreateSession(ctx context.Context, userId int) (m
 	//todo wrap err
 	res.AccessToken, err = s.tm.NewJWT(id, tokenTTL)
 	if err != nil {
-		return res, err
+		return res, fmt.Errorf("generate jwt token: %w", err)
 	}
 
 	res.RefreshToken, err = s.tm.NewRefreshToken()
 	if err != nil {
-		return res, err
+		return res, fmt.Errorf("generate refresh token: %w", err)
 	}
 
 	user, err := s.userRepo.Get(userId)
 	if err != nil {
-		return res, err
+		return res, fmt.Errorf("get user: %w", err)
 	}
 
 	user.RefreshToken = res.RefreshToken
 	user.TokenExpiredAt = time.Now().Add(tokenTTL)
 
-	//todo is this naming huita?
 	_, err = s.userRepo.Update(user)
 	if err != nil {
-		return res, err
+		return res, fmt.Errorf("update user's refresh token: %w", err)
 	}
 
 	return res, err
