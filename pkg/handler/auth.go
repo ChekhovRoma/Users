@@ -36,13 +36,11 @@ func (h *Handler) signUp(c *gin.Context) {
 func (h *Handler) SignIn(c *gin.Context) {
 	var input SignInRequest
 
-	// нужно ли выносить сообщения ошибок в отдельный файл с константами?
 	if err := c.BindJSON(&input); err != nil {
 		newErrorResponse(c, http.StatusBadRequest, "required field is missing")
 		return
 	}
 
-	// @q какой код лучше использовать вместо 500 ?
 	res, err := h.as.SignIn(c.Request.Context(), input.Email, input.Password)
 	if err != nil {
 		newErrorResponse(c, http.StatusInternalServerError, err.Error())
