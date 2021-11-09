@@ -61,7 +61,6 @@ func (r *UserRepo) Get(id int) (models.User, error) {
 	return user, result.Error
 }
 
-// Update todo кажется хуита
 func (r *UserRepo) Update(user models.User) (models.User, error) {
 	result := r.db.Save(user)
 
