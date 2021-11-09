@@ -10,6 +10,8 @@ import (
 	"users/models"
 )
 
+//go:generate mockgen -source=auth.go -destination=mocks/token_manager_mock.go
+
 const (
 	signatureKey = "Y17GJYH13Bhjbj22gvG2J4Vh"
 	tokenTTL     = 12 * time.Hour

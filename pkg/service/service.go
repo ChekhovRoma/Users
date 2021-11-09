@@ -6,7 +6,9 @@ import (
 	"users/pkg/repository"
 )
 
-//todo move to config
+//go:generate mockgen -source=service.go -destination=mocks/mock.go
+
+//todo move to env
 const salt = "edrftgyhujikiuy"
 
 type Authorization interface {
